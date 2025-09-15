@@ -15,5 +15,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	defer db.Close()
+	if err = db.Close(); err != nil {
+		log.Fatal(err)
+	}
 }
