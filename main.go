@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	dns := "host=localhost port=5432 user=postgres password=!Makar24052018 dname=social_network_db sslmode=disable"
+	dns := "host=localhost port=7777 user=postgres password=!Makar24052018 dname=social_network_db sslmode=disable"
 
 	db, err := sqlx.Open("postgres", dns)
 	if err != nil {
@@ -22,7 +22,7 @@ func main() {
 	service := service.NewService(repository)
 	controller := controller.NewController(service)
 
-	if err = controller.RunServer(":5439"); err != nil {
+	if err = controller.RunServer(":7777"); err != nil {
 		log.Fatal(err)
 	}
 
