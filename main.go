@@ -3,6 +3,9 @@ package main
 import (
 	"log"
 
+	"github.com/advor2102/socialnetwork/internal/controller"
+	"github.com/advor2102/socialnetwork/internal/repository"
+	"github.com/advor2102/socialnetwork/internal/service"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -12,6 +15,14 @@ func main() {
 
 	db, err := sqlx.Open("postgres", dns)
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	repository := repository.NewRepository(db)
+	service := service.NewService(repository)
+	controller := controller.NewController(service)
+
+	if err = controller.RunServer(":5439"); err != nil {
 		log.Fatal(err)
 	}
 
