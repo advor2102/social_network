@@ -11,8 +11,13 @@ func (s *Service) GetAllUsers() (users []models.User, err error) {
 	return users, nil
 }
 
-func (s *Service) GetUserByID() {
+func (s *Service) GetUserByID(id int) (user models.User, err error) {
+	user, err = s.repository.GetUserByID(id)
+	if err != nil {
+		return models.User{}, err
+	}
 
+	return user, nil
 }
 
 func (s *Service) CreateUser() {
