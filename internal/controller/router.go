@@ -13,7 +13,7 @@ func (controller *Controller) RegisterEndpoints() {
 	controller.router.GET("/users/:id", controller.GetUserByID)
 	controller.router.POST("/users/", controller.CreateUser)
 	controller.router.PUT("/users/:id", controller.UpdateUserByID)
-	controller.router.DELETE("/users/:id", controller.DeleteUserbyID)
+	controller.router.DELETE("/users/:id", controller.DeleteUserByID)
 }
 
 func (controller *Controller) Ping(ctx *gin.Context) {

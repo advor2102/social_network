@@ -93,7 +93,7 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 	})
 }
 
-func (controller *Controller) DeleteUserbyID(c *gin.Context) {
+func (controller *Controller) DeleteUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
@@ -103,7 +103,7 @@ func (controller *Controller) DeleteUserbyID(c *gin.Context) {
 		return
 	}
 
-	if err = controller.service.DeleteUserbyID(id); err != nil {
+	if err = controller.service.DeleteUserByID(id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})

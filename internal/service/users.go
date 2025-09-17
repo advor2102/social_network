@@ -38,8 +38,8 @@ func (s *Service) UpdateUserByID(user models.User) (err error) {
 	return nil
 }
 
-func (s *Service) DeleteUserbyID(id int) (err error) {
-	err = s.repository.DeleteUserbyID(id)
+func (s *Service) DeleteUserByID(id int) (err error) {
+	err = s.repository.DeleteUserByID(id)
 	if err != nil {
 		return err
 	}
