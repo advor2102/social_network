@@ -94,5 +94,23 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 }
 
 func (controller *Controller) DeleteUserbyID(c *gin.Context) {
+	idstr := c.Param("id")
+	id, err := strconv.Atoi(idstr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
+	if err = controller.service.DeleteUserbyID(id); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "User deleted successfully",
+	})
 }

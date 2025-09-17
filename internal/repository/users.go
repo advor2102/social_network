@@ -51,6 +51,11 @@ func (r *Repository) UpdateUserByID(user models.User) (err error) {
 	return nil
 }
 
-func (r *Repository) DeleteUserbyID() {
+func (r *Repository) DeleteUserbyID(id int) (err error) {
+	_, err = r.db.Exec(`DELETE FROM users WHERE id = $1`, id)
+	if err != nil {
+		return err
+	}
 
+	return nil
 }
