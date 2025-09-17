@@ -29,8 +29,13 @@ func (s *Service) CreateUser(user models.User) (err error) {
 	return nil
 }
 
-func (s *Service) UpdateUserByID() {
+func (s *Service) UpdateUserByID(user models.User) (err error) {
+	err = s.repository.UpdateUserByID(user)
+	if err != nil {
+		return err
+	}
 
+	return nil
 }
 
 func (s *Service) DeleteUserbyID() {

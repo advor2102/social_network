@@ -49,19 +49,48 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 		})
 		return
 	}
+
 	if err := controller.service.CreateUser(user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "product created successfully",
+		"message": "User created successfully",
 	})
 }
 
 func (controller *Controller) UpdateUserByID(c *gin.Context) {
+	idstr := c.Param("id")
+	id, err := strconv.Atoi(idstr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
+	var user models.User
+	if err = c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	user.ID = id
+
+	if err = controller.service.UpdateUserByID(user); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "User updated successfully",
+	})
 }
 
 func (controller *Controller) DeleteUserbyID(c *gin.Context) {

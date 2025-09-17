@@ -38,8 +38,17 @@ func (r *Repository) CreateUser(user models.User) (err error) {
 	return nil
 }
 
-func (r *Repository) UpdateUserByID() {
+func (r *Repository) UpdateUserByID(user models.User) (err error) {
+	_, err = r.db.Exec(`UPDATE users SET user_name = $1, email = $2, age = $3 WHERE id = $4`,
+		user.UserName,
+		user.Email,
+		user.Age,
+		user.ID)
+	if err != nil {
+		return err
+	}
 
+	return nil
 }
 
 func (r *Repository) DeleteUserbyID() {
