@@ -26,8 +26,16 @@ func (r *Repository) GetUserByID(id int) (user models.User, err error) {
 	return user, nil
 }
 
-func (r *Repository) CreateUser() {
-
+func (r *Repository) CreateUser(user models.User) (err error) {
+	_, err = r.db.Exec(`INSERT INTO users(user_name, email, age) 
+						VALUES ($1, $2, $3)`,
+		user.UserName,
+		user.Email,
+		user.Age)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *Repository) UpdateUserByID() {
