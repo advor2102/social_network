@@ -3,10 +3,15 @@ package controller
 import (
 	"net/http"
 
+	_ "github.com/advor2102/socialnetwork/docs"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func (controller *Controller) RegisterEndpoints() {
+	controller.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	controller.router.GET("/ping", controller.Ping)
 
 	controller.router.GET("/users", controller.GetAllUsers)
