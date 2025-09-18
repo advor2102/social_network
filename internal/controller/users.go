@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Success 200 {array} models.User
 // @Failure 500 {object} CommonError
-// @Router /products [get]
+// @Router /users [get]
 func (controller *Controller) GetAllUsers(c *gin.Context) {
 	users, err := controller.service.GetAllUsers()
 	if err != nil {
