@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/advor2102/socialnetwork/internal/configs"
 	"github.com/advor2102/socialnetwork/internal/controller"
@@ -26,7 +27,7 @@ func main() {
 		configs.AppSettings.PostgresParams.Host,
 		configs.AppSettings.PostgresParams.Port,
 		configs.AppSettings.PostgresParams.User,
-		configs.AppSettings.PostgresParams.Password,
+		os.Getenv("POSTGRES_PASSWORD"),
 		configs.AppSettings.PostgresParams.Database,
 	)
 

@@ -6,11 +6,16 @@ import (
 	"os"
 
 	"github.com/advor2102/socialnetwork/internal/models"
+	"github.com/joho/godotenv"
 )
 
 var AppSettings models.Config
 
 func ReadSettings() error {
+	if err := godotenv.Load(`.env`); err != nil {
+		return fmt.Errorf("error loading .env file: %w", err)
+	}
+
 	configFile, err := os.Open(`C:\Users\AlexanderDvornikov\golang_course\SocialNetwork\internal\configs\configs.json`)
 	if err != nil {
 		return fmt.Errorf("error while opening config file: %w", err)
