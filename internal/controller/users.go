@@ -8,12 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetAllUsers
+// @Summary Get all users
+// @Description Get list of all users
+// @Tags Users
+// @Produce json
+// @Success 200 {array} models.User
+// @Failure 500 {object} CommonError
+// @Router /products [get]
 func (controller *Controller) GetAllUsers(c *gin.Context) {
 	users, err := controller.service.GetAllUsers()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
 		return
 	}
 

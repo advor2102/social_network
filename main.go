@@ -13,6 +13,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// @title SocialNetwork API
+// @contact.name SocialNetwork API Service
+// @contact.url https://socialnetwork.com
+// @contact.email help@socialetwork.com
 func main() {
 	if err := configs.ReadSettings(); err != nil {
 		log.Fatal(err)

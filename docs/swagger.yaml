@@ -1,0 +1,44 @@
+definitions:
+  controller.CommonError:
+    properties:
+      error:
+        type: string
+    type: object
+  models.User:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      user_name:
+        type: string
+    type: object
+info:
+  contact:
+    email: help@socialetwork.com
+    name: SocialNetwork API Service
+    url: https://socialnetwork.com
+  title: SocialNetwork API
+paths:
+  /products:
+    get:
+      description: Get list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+      summary: Get all users
+      tags:
+      - Users
+swagger: "2.0"
