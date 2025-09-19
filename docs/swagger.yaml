@@ -36,6 +36,19 @@ info:
     url: https://socialnetwork.com
   title: SocialNetwork API
 paths:
+  /ping:
+    get:
+      description: Check of the service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Health-check
+      tags:
+      - Ping
   /users:
     get:
       description: Get list of all users
@@ -73,6 +86,10 @@ paths:
             $ref: '#/definitions/controller.CommonResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "422":
+          description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controller.CommonError'
         "500":
@@ -170,6 +187,10 @@ paths:
             $ref: '#/definitions/controller.CommonError'
         "404":
           description: Not Found
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "422":
+          description: Unprocessable Entity
           schema:
             $ref: '#/definitions/controller.CommonError'
         "500":

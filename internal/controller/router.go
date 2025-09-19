@@ -21,10 +21,15 @@ func (controller *Controller) RegisterEndpoints() {
 	controller.router.DELETE("/users/:id", controller.DeleteUserByID)
 }
 
+// Ping
+// @Summary Health-check
+// @Description Check of the service
+// @Tags Ping
+// @Produce json
+// @Success 200 {object} models.User
+// @Router /ping [get]
 func (controller *Controller) Ping(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"ping": "pong",
-	})
+	ctx.JSON(http.StatusOK, CommonResponse{Message: "Service's up and running"})
 }
 
 func (controller *Controller) RunServer(address string) error {

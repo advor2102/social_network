@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/advor2102/socialnetwork/internal/contracts"
 	"github.com/advor2102/socialnetwork/internal/errs"
 	"github.com/advor2102/socialnetwork/internal/service"
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,7 @@ import (
 
 type Controller struct {
 	router  *gin.Engine
-	service *service.Service
+	service contracts.ServiceI
 }
 
 func NewController(service *service.Service) *Controller {
