@@ -19,7 +19,7 @@ import (
 func (controller *Controller) GetAllUsers(c *gin.Context) {
 	users, err := controller.service.GetAllUsers()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 
@@ -34,19 +34,20 @@ func (controller *Controller) GetAllUsers(c *gin.Context) {
 // @Param id path int true "user id"
 // @Success 200 {object} models.User
 // @Failure 400 {object} CommonError
+// @Failure 404 {object} CommonError
 // @Failure 500 {object} CommonError
 // @Router /users/{id} [get]
 func (controller *Controller) GetUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 
 	user, err := controller.service.GetUserByID(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 
@@ -73,12 +74,12 @@ type CreateUserRequest struct {
 func (controller *Controller) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 
 	if err := controller.service.CreateUser(user); err != nil {
-		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 
@@ -95,26 +96,27 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 // @Param request_body body CreateUserRequest true "updated user data"
 // @Success 200 {object} CommonResponse
 // @Failure 400 {object} CommonError
+// @Failure 404 {object} CommonError
 // @Failure 500 {object} CommonError
 // @Router /users/{id} [put]
 func (controller *Controller) UpdateUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 
 	var user models.User
 	if err = c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 
 	user.ID = id
 
 	if err = controller.service.UpdateUserByID(user); err != nil {
-		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 	}
 
 	c.JSON(http.StatusOK, CommonResponse{Message: "User updated successfully"})
@@ -128,18 +130,19 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 // @Param id path int true "user id"
 // @Success 200 {object} CommonResponse
 // @Failure 400 {object} CommonError
+// @Failure 404 {object} CommonError
 // @Failure 500 {object} CommonError
 // @Router /users/{id} [delete]
 func (controller *Controller) DeleteUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 
 	if err = controller.service.DeleteUserByID(id); err != nil {
-		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
+		controller.handleError(c, err)
 		return
 	}
 

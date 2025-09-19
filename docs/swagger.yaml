@@ -102,6 +102,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controller.CommonError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.CommonError'
         "500":
           description: Internal Server Error
           schema:
@@ -126,6 +130,10 @@ paths:
             $ref: '#/definitions/models.User'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/controller.CommonError'
         "500":
@@ -158,6 +166,10 @@ paths:
             $ref: '#/definitions/controller.CommonResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/controller.CommonError'
         "500":
