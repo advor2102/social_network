@@ -71,12 +71,18 @@ type CreateUserRequest struct {
 // @Param request_body body CreateUserRequest true "new user data"
 // @Success 201 {object} CommonResponse
 // @Failure 400 {object} CommonError
+// @Failure 422 {object} CommonError
 // @Failure 500 {object} CommonError
 // @Router /users [post]
 func (controller *Controller) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		controller.handleError(c, errors.Join(errs.ErrInvalidRequestBody, err))
+		return
+	}
+
+	if user.UserName == "" || user.Age < 0 || user.Email == "" {
+		controller.handleError(c, errs.ErrInvalidFieldValue)
 		return
 	}
 
@@ -99,6 +105,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 // @Success 200 {object} CommonResponse
 // @Failure 400 {object} CommonError
 // @Failure 404 {object} CommonError
+// @Failure 422 {object} CommonError
 // @Failure 500 {object} CommonError
 // @Router /users/{id} [put]
 func (controller *Controller) UpdateUserByID(c *gin.Context) {
@@ -112,6 +119,11 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 	var user models.User
 	if err = c.ShouldBindJSON(&user); err != nil {
 		controller.handleError(c, errors.Join(errs.ErrInvalidRequestBody, err))
+		return
+	}
+
+	if user.UserName == "" || user.Age < 0 || user.Email == "" {
+		controller.handleError(c, errs.ErrInvalidFieldValue)
 		return
 	}
 

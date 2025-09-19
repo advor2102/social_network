@@ -7,4 +7,5 @@ var (
 	ErrInvalidUserID      = errors.New("invalid user id")
 	ErrNotFound           = errors.New("not found")
 	ErrInvalidRequestBody = errors.New("invalid request body")
+	ErrInvalidFieldValue  = errors.New("invalid field value")
 )
