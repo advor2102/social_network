@@ -9,7 +9,7 @@ func (r *Repository) GetAllUsers() (users []models.User, err error) {
 		SELECT id, user_name, email, age
 		FROM users
 		ORDER BY id`); err != nil {
-		return nil, err
+		return nil, r.translateError(err)
 	}
 
 	return users, nil
@@ -20,7 +20,7 @@ func (r *Repository) GetUserByID(id int) (user models.User, err error) {
 		SELECT id, user_name, email, age
 		FROM users
 		WHERE id = $1`, id); err != nil {
-		return models.User{}, err
+		return models.User{}, r.translateError(err)
 	}
 
 	return user, nil
@@ -33,7 +33,7 @@ func (r *Repository) CreateUser(user models.User) (err error) {
 		user.Email,
 		user.Age)
 	if err != nil {
-		return err
+		return r.translateError(err)
 	}
 	return nil
 }
@@ -45,7 +45,7 @@ func (r *Repository) UpdateUserByID(user models.User) (err error) {
 		user.Age,
 		user.ID)
 	if err != nil {
-		return err
+		return r.translateError(err)
 	}
 
 	return nil
@@ -54,7 +54,7 @@ func (r *Repository) UpdateUserByID(user models.User) (err error) {
 func (r *Repository) DeleteUserByID(id int) (err error) {
 	_, err = r.db.Exec(`DELETE FROM users WHERE id = $1`, id)
 	if err != nil {
-		return err
+		return r.translateError(err)
 	}
 
 	return nil
