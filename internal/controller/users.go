@@ -41,7 +41,7 @@ func (controller *Controller) GetAllUsers(c *gin.Context) {
 func (controller *Controller) GetUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
-	if err != nil {
+	if err != nil || id < 1 {
 		controller.handleError(c, errs.ErrInvalidUserID)
 		return
 	}
@@ -103,7 +103,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 func (controller *Controller) UpdateUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
-	if err != nil {
+	if err != nil || id < 1 {
 		controller.handleError(c, errs.ErrInvalidUserID)
 		return
 	}
@@ -137,7 +137,7 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 func (controller *Controller) DeleteUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
-	if err != nil {
+	if err != nil || id < 1 {
 		controller.handleError(c, errs.ErrInvalidUserID)
 		return
 	}
