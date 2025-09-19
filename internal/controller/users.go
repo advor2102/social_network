@@ -28,7 +28,7 @@ func (controller *Controller) GetAllUsers(c *gin.Context) {
 
 // GetUserByID
 // @Summary Get user by ID
-// @Description Get user's data by IF
+// @Description Get user's data by ID
 // @Tags Users
 // @Produce json
 // @Param id path int true "user id"
@@ -53,13 +53,19 @@ func (controller *Controller) GetUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+type CreateUserRequest struct {
+	UserName string `json:"user_name" db:"user_name"`
+	Email    string `json:"email" db:"email"`
+	Age      int    `json:"age" db:"age"`
+}
+
 // CreateUser
 // @Summary Create user
 // @Description Create new user and add to database
 // @Tags Users
-// @Produce json
 // @Consume json
-// @Param request_body body models.User true "new user data"
+// @Produce json
+// @Param request_body body CreateUserRequest true "new user data"
 // @Success 201 {object} CommonResponse
 // @Failure 400 {object} CommonError
 // @Failure 500 {object} CommonError
@@ -79,35 +85,39 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, CommonResponse{Message: "User created successfully"})
 }
 
+// UpdateUserByID
+// @Summary Update user by ID
+// @Description Update user's data by ID
+// @Tags Users
+// @Consume json
+// @Produce json
+// @Param id path int true "user id"
+// @Param request_body body CreateUserRequest true "updated user data"
+// @Success 200 {object} CommonResponse
+// @Failure 400 {object} CommonError
+// @Failure 500 {object} CommonError
+// @Router /users/{id} [put]
 func (controller *Controller) UpdateUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
 		return
 	}
 
 	var user models.User
 	if err = c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
 		return
 	}
 
 	user.ID = id
 
 	if err = controller.service.UpdateUserByID(user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "User updated successfully",
-	})
+	c.JSON(http.StatusOK, CommonResponse{Message: "User updated successfully"})
 }
 
 func (controller *Controller) DeleteUserByID(c *gin.Context) {
