@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/advor2102/socialnetwork/internal/errs"
 	"github.com/advor2102/socialnetwork/internal/models"
 	"github.com/gin-gonic/gin"
 )
@@ -41,7 +42,7 @@ func (controller *Controller) GetUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		controller.handleError(c, err)
+		controller.handleError(c, errs.ErrInvalidUserID)
 		return
 	}
 
@@ -103,7 +104,7 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		controller.handleError(c, err)
+		controller.handleError(c, errs.ErrInvalidUserID)
 		return
 	}
 
@@ -137,7 +138,7 @@ func (controller *Controller) DeleteUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		controller.handleError(c, err)
+		controller.handleError(c, errs.ErrInvalidUserID)
 		return
 	}
 
