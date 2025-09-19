@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -75,7 +76,7 @@ type CreateUserRequest struct {
 func (controller *Controller) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		controller.handleError(c, err)
+		controller.handleError(c, errors.Join(errs.ErrInvalidRequestBody, err))
 		return
 	}
 
@@ -110,7 +111,7 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 
 	var user models.User
 	if err = c.ShouldBindJSON(&user); err != nil {
-		controller.handleError(c, err)
+		controller.handleError(c, errors.Join(errs.ErrInvalidRequestBody, err))
 		return
 	}
 
