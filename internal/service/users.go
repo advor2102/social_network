@@ -1,6 +1,11 @@
 package service
 
-import "github.com/advor2102/socialnetwork/internal/models"
+import (
+	"errors"
+
+	"github.com/advor2102/socialnetwork/internal/errs"
+	"github.com/advor2102/socialnetwork/internal/models"
+)
 
 func (s *Service) GetAllUsers() (users []models.User, err error) {
 	users, err = s.repository.GetAllUsers()
@@ -14,6 +19,9 @@ func (s *Service) GetAllUsers() (users []models.User, err error) {
 func (s *Service) GetUserByID(id int) (user models.User, err error) {
 	user, err = s.repository.GetUserByID(id)
 	if err != nil {
+		if errors.Is(err, errs.ErrNotFound) {
+			return models.User{}, errs.ErrUserNotFound
+		}
 		return models.User{}, err
 	}
 
@@ -30,6 +38,14 @@ func (s *Service) CreateUser(user models.User) (err error) {
 }
 
 func (s *Service) UpdateUserByID(user models.User) (err error) {
+	_, err = s.repository.GetUserByID(user.ID)
+	if err != nil {
+		if errors.Is(err, errs.ErrNotFound) {
+			return errs.ErrUserNotFound
+		}
+		return err
+	}
+
 	err = s.repository.UpdateUserByID(user)
 	if err != nil {
 		return err
@@ -39,6 +55,14 @@ func (s *Service) UpdateUserByID(user models.User) (err error) {
 }
 
 func (s *Service) DeleteUserByID(id int) (err error) {
+	_, err = s.repository.GetUserByID(id)
+	if err != nil {
+		if errors.Is(err, errs.ErrNotFound) {
+			return errs.ErrUserNotFound
+		}
+		return err
+	}
+
 	err = s.repository.DeleteUserByID(id)
 	if err != nil {
 		return err
