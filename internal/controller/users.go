@@ -26,46 +26,57 @@ func (controller *Controller) GetAllUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+// GetUserByID
+// @Summary Get user by ID
+// @Description Get user's data by IF
+// @Tags Users
+// @Produce json
+// @Param id path int true "user id"
+// @Success 200 {object} models.User
+// @Failure 400 {object} CommonError
+// @Failure 500 {object} CommonError
+// @Router /users/{id} [get]
 func (controller *Controller) GetUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
 		return
 	}
 
 	user, err := controller.service.GetUserByID(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, user)
 }
 
+// CreateUser
+// @Summary Create user
+// @Description Create new user and add to database
+// @Tags Users
+// @Produce json
+// @Consume json
+// @Param request_body body models.User true "new user data"
+// @Success 201 {object} CommonResponse
+// @Failure 400 {object} CommonError
+// @Failure 500 {object} CommonError
+// @Router /users [post]
 func (controller *Controller) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
 		return
 	}
 
 	if err := controller.service.CreateUser(user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "User created successfully",
-	})
+	c.JSON(http.StatusCreated, CommonResponse{Message: "User created successfully"})
 }
 
 func (controller *Controller) UpdateUserByID(c *gin.Context) {

@@ -4,6 +4,11 @@ definitions:
       error:
         type: string
     type: object
+  controller.CommonResponse:
+    properties:
+      message:
+        type: string
+    type: object
   models.User:
     properties:
       age:
@@ -39,6 +44,60 @@ paths:
           schema:
             $ref: '#/definitions/controller.CommonError'
       summary: Get all users
+      tags:
+      - Users
+    post:
+      description: Create new user and add to database
+      parameters:
+      - description: new user data
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controller.CommonResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+      summary: Create user
+      tags:
+      - Users
+  /users/{id}:
+    get:
+      description: Get user's data by IF
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+      summary: Get user by ID
       tags:
       - Users
 swagger: "2.0"
