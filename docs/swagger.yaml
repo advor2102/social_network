@@ -22,7 +22,7 @@ info:
     url: https://socialnetwork.com
   title: SocialNetwork API
 paths:
-  /products:
+  /users:
     get:
       description: Get list of all users
       produces:
