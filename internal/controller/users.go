@@ -120,24 +120,28 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, CommonResponse{Message: "User updated successfully"})
 }
 
+// DeleteUserByID
+// @Summary Delete user by ID
+// @Description Delete user's data by ID
+// @Tags Users
+// @Produce json
+// @Param id path int true "user id"
+// @Success 200 {object} CommonResponse
+// @Failure 400 {object} CommonError
+// @Failure 500 {object} CommonError
+// @Router /users/{id} [delete]
 func (controller *Controller) DeleteUserByID(c *gin.Context) {
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
 		return
 	}
 
 	if err = controller.service.DeleteUserByID(id); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "User deleted successfully",
-	})
+	c.JSON(http.StatusOK, CommonResponse{Message: "User deleted successfully"})
 }

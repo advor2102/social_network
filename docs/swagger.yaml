@@ -83,6 +83,32 @@ paths:
       tags:
       - Users
   /users/{id}:
+    delete:
+      description: Delete user's data by ID
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.CommonResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+      summary: Delete user by ID
+      tags:
+      - Users
     get:
       description: Get user's data by ID
       parameters:
