@@ -9,11 +9,15 @@ import (
 )
 
 type Repository struct {
-	db *sqlx.DB
+	db    *sqlx.DB
+	cache *Cache
 }
 
-func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{db: db}
+func NewRepository(db *sqlx.DB, cache *Cache) *Repository {
+	return &Repository{
+		db:    db,
+		cache: cache,
+	}
 }
 
 func (r *Repository) translateError(err error) error {
