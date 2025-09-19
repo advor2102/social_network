@@ -1,11 +1,13 @@
 package service
 
-import "github.com/advor2102/socialnetwork/internal/repository"
+import (
+	"github.com/advor2102/socialnetwork/internal/contracts"
+)
 
 type Service struct {
-	repository *repository.Repository
+	repository contracts.RepositoryI
 }
 
-func NewService(repository *repository.Repository) *Service {
+func NewService(repository contracts.RepositoryI) *Service {
 	return &Service{repository: repository}
 }

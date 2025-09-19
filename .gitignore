@@ -1,2 +1,3 @@
-#SQL команды
 *.sql
+internal/configs/configs.json
+.env
