@@ -19,7 +19,7 @@ import (
 // @Failure 500 {object} CommonError
 // @Router /users [get]
 func (controller *Controller) GetAllUsers(c *gin.Context) {
-	users, err := controller.service.GetAllUsers()
+	users, err := controller.service.GetAllUsers(c)
 	if err != nil {
 		controller.handleError(c, err)
 		return
@@ -47,7 +47,7 @@ func (controller *Controller) GetUserByID(c *gin.Context) {
 		return
 	}
 
-	user, err := controller.service.GetUserByID(id)
+	user, err := controller.service.GetUserByID(c, id)
 	if err != nil {
 		controller.handleError(c, err)
 		return
@@ -86,7 +86,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 		return
 	}
 
-	if err := controller.service.CreateUser(user); err != nil {
+	if err := controller.service.CreateUser(c, user); err != nil {
 		controller.handleError(c, err)
 		return
 	}
@@ -129,7 +129,7 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 
 	user.ID = id
 
-	if err = controller.service.UpdateUserByID(user); err != nil {
+	if err = controller.service.UpdateUserByID(c, user); err != nil {
 		controller.handleError(c, err)
 	}
 
@@ -155,7 +155,7 @@ func (controller *Controller) DeleteUserByID(c *gin.Context) {
 		return
 	}
 
-	if err = controller.service.DeleteUserByID(id); err != nil {
+	if err = controller.service.DeleteUserByID(c, id); err != nil {
 		controller.handleError(c, err)
 		return
 	}
