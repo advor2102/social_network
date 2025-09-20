@@ -50,8 +50,8 @@ func main() {
 
 	cache := repository.NewCache(rdb)
 
-	repository := repository.NewRepository(db, cache)
-	service := service.NewService(repository)
+	repository := repository.NewRepository(db)
+	service := service.NewService(repository, cache)
 	controller := controller.NewController(service)
 
 	if err = controller.RunServer(fmt.Sprintf(":%s", configs.AppSettings.AppParams.PortRun)); err != nil {

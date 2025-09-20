@@ -10,13 +10,11 @@ import (
 
 type Repository struct {
 	db    *sqlx.DB
-	cache *Cache
 }
 
-func NewRepository(db *sqlx.DB, cache *Cache) *Repository {
+func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		db:    db,
-		cache: cache,
 	}
 }
 
