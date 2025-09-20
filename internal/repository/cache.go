@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/advor2102/socialnetwork/internal/configs"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -19,14 +20,14 @@ func NewCache(client *redis.Client) *Cache {
 	}
 }
 
-func (c *Cache) Set( ctx context.Context, key string, value interface{}, duration time.Duration) error {
+func (c *Cache) Set(ctx context.Context, key string, value interface{}, duration time.Duration) error {
 	rawU, err := json.Marshal(value)
 	if err != nil {
 		fmt.Println("error during marshal:", err)
 		return err
 	}
 
-	if err = c.rdb.Set(ctx, key, rawU, duration).Err(); err != nil {
+	if err = c.rdb.Set(ctx, c.formatKey(key), rawU, duration).Err(); err != nil {
 		fmt.Println("error during set:", err)
 		return err
 	}
@@ -35,7 +36,7 @@ func (c *Cache) Set( ctx context.Context, key string, value interface{}, duratio
 }
 
 func (c *Cache) Get(ctx context.Context, key string, response interface{}) error {
-	val, err := c.rdb.Get(ctx, key).Result()
+	val, err := c.rdb.Get(ctx, c.formatKey(key)).Result()
 	if err != nil {
 		fmt.Println("error during get:", err)
 		return err
@@ -47,4 +48,8 @@ func (c *Cache) Get(ctx context.Context, key string, response interface{}) error
 	}
 
 	return nil
+}
+
+func (c *Cache) formatKey(key string) string {
+	return fmt.Sprintf("%s:%s", configs.AppSettings.AppParams.ServerName, key)
 }
