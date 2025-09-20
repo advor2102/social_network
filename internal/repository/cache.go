@@ -19,7 +19,7 @@ func NewCache(client *redis.Client) *Cache {
 	}
 }
 
-func (c *Cache) Set(rdb *redis.Client, ctx context.Context, key string, value interface{}, duration time.Duration) error {
+func (c *Cache) Set( ctx context.Context, key string, value interface{}, duration time.Duration) error {
 	rawU, err := json.Marshal(value)
 	if err != nil {
 		fmt.Println("error during marshal:", err)
