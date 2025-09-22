@@ -6,6 +6,8 @@ import (
 	"github.com/advor2102/socialnetwork/internal/models"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks\mock.go
+
 type ServiceI interface {
 	GetAllUsers(ctx context.Context) (users []models.User, err error)
 	GetUserByID(ctx context.Context, id int) (user models.User, err error)
