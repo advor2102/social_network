@@ -1,6 +1,10 @@
 package contracts
 
-import "github.com/advor2102/socialnetwork/internal/models"
+import (
+	"github.com/advor2102/socialnetwork/internal/models"
+)
+
+//go:generate mockgen -source=service.go -destination=mocks\mock.go
 
 type ServiceI interface {
 	GetAllUsers() (users []models.User, err error)

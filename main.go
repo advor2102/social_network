@@ -11,6 +11,7 @@ import (
 	"github.com/advor2102/socialnetwork/internal/service"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"github.com/redis/go-redis/v9"
 )
 
 // @title SocialNetwork API
@@ -40,8 +41,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	rdb := redis.NewClient(&redis.Options{
+		Addr: fmt.Sprintf("%s:%s",
+			configs.AppSettings.RedisParams.Host,
+			configs.AppSettings.RedisParams.Port),
+		DB: configs.AppSettings.RedisParams.Database,
+	})
+
+	cache := repository.NewCache(rdb)
+
 	repository := repository.NewRepository(db)
-	service := service.NewService(repository)
+	service := service.NewService(repository, cache)
 	controller := controller.NewController(service)
 
 	if err = controller.RunServer(fmt.Sprintf(":%s", configs.AppSettings.AppParams.PortRun)); err != nil {

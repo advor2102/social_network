@@ -9,11 +9,13 @@ import (
 )
 
 type Repository struct {
-	db *sqlx.DB
+	db    *sqlx.DB
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{db: db}
+	return &Repository{
+		db:    db,
+	}
 }
 
 func (r *Repository) translateError(err error) error {
