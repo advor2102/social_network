@@ -6,7 +6,6 @@ import (
 
 	"github.com/advor2102/socialnetwork/internal/contracts"
 	"github.com/advor2102/socialnetwork/internal/errs"
-	"github.com/advor2102/socialnetwork/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,7 +14,7 @@ type Controller struct {
 	service contracts.ServiceI
 }
 
-func NewController(service *service.Service) *Controller {
+func NewController(service contracts.ServiceI) *Controller {
 	return &Controller{
 		service: service,
 		router:  gin.Default(),
