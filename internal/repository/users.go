@@ -15,7 +15,7 @@ func (r *Repository) GetAllUsers(ctx context.Context) (users []models.User, err 
 		SELECT id, user_name, email, age
 		FROM users
 		ORDER BY id`); err != nil {
-		logger.Err(err).Msg("error selecting products")
+		logger.Err(err).Msg("error selecting users")
 		return nil, r.translateError(err)
 	}
 
@@ -29,7 +29,7 @@ func (r *Repository) GetUserByID(ctx context.Context, id int) (user models.User,
 		SELECT id, user_name, email, age
 		FROM users
 		WHERE id = $1`, id); err != nil {
-		logger.Err(err).Msg("error selecting products")
+		logger.Err(err).Msg("error selecting user")
 		return models.User{}, r.translateError(err)
 	}
 
@@ -45,7 +45,7 @@ func (r *Repository) CreateUser(ctx context.Context, user models.User) (err erro
 		user.Email,
 		user.Age)
 	if err != nil {
-		logger.Err(err).Msg("error inserting products")
+		logger.Err(err).Msg("error inserting user")
 		return r.translateError(err)
 	}
 	return nil

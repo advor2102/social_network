@@ -8,4 +8,5 @@ var (
 	ErrNotFound           = errors.New("not found")
 	ErrInvalidRequestBody = errors.New("invalid request body")
 	ErrInvalidFieldValue  = errors.New("invalid field value")
+	ErrEmployeeNameAlreadyExist = errors.New("employee name already exist")
 )
