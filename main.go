@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/advor2102/socialnetwork/internal/configs"
@@ -12,6 +11,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog"
 )
 
 // @title SocialNetwork API
@@ -19,9 +19,14 @@ import (
 // @contact.url https://socialnetwork.com
 // @contact.email help@socialetwork.com
 func main() {
+	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	logger.Info().Msg("Starting up application...")
+
 	if err := configs.ReadSettings(); err != nil {
-		log.Fatal(err)
+		logger.Error().Err(err).Msg("Error during reading settings")
+		return
 	}
+	logger.Info().Msg("Read settings successfully")
 
 	dns := fmt.Sprintf(`host=%s 
 						port=%s
@@ -38,8 +43,9 @@ func main() {
 
 	db, err := sqlx.Open("postgres", dns)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error().Err(err).Msg("Error during connection to database")
 	}
+	logger.Info().Msg("Database connected successfully")
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%s",
@@ -49,16 +55,17 @@ func main() {
 	})
 
 	cache := repository.NewCache(rdb)
+	logger.Info().Msg("Redis connected successfully")
 
 	repository := repository.NewRepository(db)
 	service := service.NewService(repository, cache)
 	controller := controller.NewController(service)
 
 	if err = controller.RunServer(fmt.Sprintf(":%s", configs.AppSettings.AppParams.PortRun)); err != nil {
-		log.Fatal(err)
+		logger.Error().Err(err).Msg("Error during running http server")
 	}
 
 	if err = db.Close(); err != nil {
-		log.Fatal(err)
+		logger.Error().Err(err).Msg("Error during closing database connection")
 	}
 }
