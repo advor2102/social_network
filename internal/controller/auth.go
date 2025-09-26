@@ -34,6 +34,32 @@ func (ctrl *Controller) SignUp(c *gin.Context) {
 	c.JSON(http.StatusCreated, CommonResponse{Message: "Employee created successfully"})
 }
 
-func (ctrl *Controller) SignIn(c *gin.Context) {
+type SignIpRequest struct {
+	EmployeeName string `json:"employee_name" db:"employee_name"`
+	Password     string `json:"password" db:"password"`
+}
 
+type SignIpResponse struct {
+	Token string `json:"token"`
+}
+
+func (ctrl *Controller) SignIn(c *gin.Context) {
+	var input SignIpRequest
+	if err := c.ShouldBindJSON(&input); err != nil {
+		ctrl.handleError(c, errors.Join(errs.ErrInvalidRequestBody, err))
+		return
+	}
+
+	token, err := ctrl.service.Authenticate(c, models.Employee{
+		EmployeeName: input.EmployeeName,
+		Password:     input.Password,
+	})
+	if err != nil {
+		ctrl.handleError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, SignIpResponse{
+		Token: token,
+	})
 }

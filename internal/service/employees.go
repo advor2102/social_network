@@ -30,3 +30,27 @@ func (s *Service) CreateEmployee(ctx context.Context, employee models.Employee) 
 
 	return nil
 }
+
+func (s *Service) Authenticate(ctx context.Context, employee models.Employee)(string, error){
+	empFromDB, err := s.repository.GetEmployeeByEmployeeName(ctx, employee.EmployeeName)
+	if err != nil{
+		if !errors.Is(err, errs.ErrNotFound) {
+			return "", errs.ErrEmployeeNotFound
+		}
+
+		return "", err
+	}
+
+	employee.Password, err = utils.GenerateHash(employee.Password)
+	if err != nil{
+		return "", err
+	}
+
+	if empFromDB.Password != employee.Password {
+		return "", errs.ErrIncorrectEmployeeNameOrPassword
+	}
+
+	token := "secret token"
+
+	return token, nil
+}
