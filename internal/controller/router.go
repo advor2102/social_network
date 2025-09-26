@@ -14,6 +14,9 @@ func (controller *Controller) RegisterEndpoints() {
 
 	controller.router.GET("/ping", controller.Ping)
 
+	controller.router.POST("/auth/sign-up", controller.SignUp)
+	controller.router.POST("/auth/sign-up", controller.SignIn)
+
 	controller.router.GET("/users", controller.GetAllUsers)
 	controller.router.GET("/users/:id", controller.GetUserByID)
 	controller.router.POST("/users", controller.CreateUser)
