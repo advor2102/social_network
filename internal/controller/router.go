@@ -14,15 +14,20 @@ func (controller *Controller) RegisterEndpoints() {
 
 	controller.router.GET("/ping", controller.Ping)
 
-	controller.router.POST("/auth/sign-up", controller.SignUp)
-	controller.router.POST("/auth/sign-in", controller.SignIn)
-
+	authG := controller.router.Group("/auth")
+	{
+		authG.POST("/auth/sign-up", controller.SignUp)
+		authG.POST("/auth/sign-in", controller.SignIn)
+	}
+	
 	apiG := controller.router.Group("/api")
-	apiG.GET("/users", controller.GetAllUsers)
-	apiG.GET("/users/:id", controller.GetUserByID)
-	apiG.POST("/users", controller.CreateUser)
-	apiG.PUT("/users/:id", controller.UpdateUserByID)
-	apiG.DELETE("/users/:id", controller.DeleteUserByID)
+	{
+		apiG.GET("/users", controller.GetAllUsers)
+		apiG.GET("/users/:id", controller.GetUserByID)
+		apiG.POST("/users", controller.CreateUser)
+		apiG.PUT("/users/:id", controller.UpdateUserByID)
+		apiG.DELETE("/users/:id", controller.DeleteUserByID)
+	}
 }
 
 // Ping
