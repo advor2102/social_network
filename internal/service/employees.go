@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 
+	"github.com/advor2102/socialnetwork/internal/configs"
 	"github.com/advor2102/socialnetwork/internal/errs"
 	"github.com/advor2102/socialnetwork/internal/models"
+	"github.com/advor2102/socialnetwork/pkg"
 	"github.com/advor2102/socialnetwork/utils"
 )
 
@@ -50,7 +52,10 @@ func (s *Service) Authenticate(ctx context.Context, employee models.Employee)(st
 		return "", errs.ErrIncorrectEmployeeNameOrPassword
 	}
 
-	token := "secret token"
+	token, err := pkg.GenerateToken(empFromDB.ID, configs.AppSettings.AuthParams.TtlMinutes)
+	if err != nil {
+		return "", err
+	}
 
 	return token, nil
 }

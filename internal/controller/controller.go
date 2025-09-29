@@ -29,7 +29,7 @@ func (controller *Controller) handleError(c *gin.Context, err error) {
 		c.JSON(http.StatusBadRequest, CommonError{Error: err.Error()})
 	case errors.Is(err, errs.ErrInvalidFieldValue) || errors.Is(err, errs.ErrEmployeeNameAlreadyExist):
 		c.JSON(http.StatusUnprocessableEntity, CommonError{Error: err.Error()})
-	case errors.Is(err, errs.ErrIncorrectEmployeeNameOrPassword):
+	case errors.Is(err, errs.ErrIncorrectEmployeeNameOrPassword) || errors.Is(err, errs.ErrInvalidToken):
 		c.JSON(http.StatusUnauthorized, CommonError{Error: err.Error()})
 	default:
 		c.JSON(http.StatusInternalServerError, CommonError{Error: err.Error()})

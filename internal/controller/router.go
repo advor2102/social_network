@@ -17,11 +17,12 @@ func (controller *Controller) RegisterEndpoints() {
 	controller.router.POST("/auth/sign-up", controller.SignUp)
 	controller.router.POST("/auth/sign-in", controller.SignIn)
 
-	controller.router.GET("/users", controller.GetAllUsers)
-	controller.router.GET("/users/:id", controller.GetUserByID)
-	controller.router.POST("/users", controller.CreateUser)
-	controller.router.PUT("/users/:id", controller.UpdateUserByID)
-	controller.router.DELETE("/users/:id", controller.DeleteUserByID)
+	apiG := controller.router.Group("/api")
+	apiG.GET("/users", controller.GetAllUsers)
+	apiG.GET("/users/:id", controller.GetUserByID)
+	apiG.POST("/users", controller.CreateUser)
+	apiG.PUT("/users/:id", controller.UpdateUserByID)
+	apiG.DELETE("/users/:id", controller.DeleteUserByID)
 }
 
 // Ping
