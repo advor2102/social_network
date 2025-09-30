@@ -40,7 +40,7 @@ type SignIpRequest struct {
 	Password     string `json:"password" db:"password"`
 }
 
-type SignIpResponse struct {
+type TokenPairResponse struct {
 	AccessToken  string `json:"access_token_ttl_minutes"`
 	RefreshToken string `json:"refresh_token_ttl_days"`
 }
@@ -67,7 +67,7 @@ func (ctrl *Controller) SignIn(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, SignIpResponse{
+	c.JSON(http.StatusOK, TokenPairResponse{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	})
@@ -101,7 +101,7 @@ func (ctrl *Controller) RefreshTokenPairs(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, SignIpResponse{
+	c.JSON(http.StatusOK, TokenPairResponse{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	})
