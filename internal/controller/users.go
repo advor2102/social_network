@@ -17,6 +17,7 @@ import (
 // @Description Get list of all users
 // @Tags Users
 // @Produce json
+// @Security BearerAuth
 // @Success 200 {array} models.User
 // @Failure 500 {object} CommonError
 // @Router /api/users [get]
@@ -44,6 +45,7 @@ func (controller *Controller) GetAllUsers(c *gin.Context) {
 // @Description Get user's data by ID
 // @Tags Users
 // @Produce json
+// @Security BearerAuth
 // @Param id path int true "user id"
 // @Success 200 {object} models.User
 // @Failure 400 {object} CommonError
@@ -88,6 +90,7 @@ type CreateUserRequest struct {
 // @Tags Users
 // @Consume json
 // @Produce json
+// @Security BearerAuth
 // @Param request_body body CreateUserRequest true "new user data"
 // @Success 201 {object} CommonResponse
 // @Failure 400 {object} CommonError
@@ -129,6 +132,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 // @Tags Users
 // @Consume json
 // @Produce json
+// @Security BearerAuth
 // @Param id path int true "user id"
 // @Param request_body body CreateUserRequest true "updated user data"
 // @Success 200 {object} CommonResponse
@@ -179,6 +183,7 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 // @Description Delete user's data by ID
 // @Tags Users
 // @Produce json
+// @Security BearerAuth
 // @Param id path int true "user id"
 // @Success 200 {object} CommonResponse
 // @Failure 400 {object} CommonError

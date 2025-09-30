@@ -11,6 +11,11 @@
     "paths": {
         "/api/users": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get list of all users",
                 "produces": [
                     "application/json"
@@ -38,6 +43,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new user and add to database",
                 "produces": [
                     "application/json"
@@ -87,6 +97,11 @@
         },
         "/api/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get user's data by ID",
                 "produces": [
                     "application/json"
@@ -132,6 +147,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update user's data by ID",
                 "produces": [
                     "application/json"
@@ -192,6 +212,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete user's data by ID",
                 "produces": [
                     "application/json"
@@ -486,6 +511,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
