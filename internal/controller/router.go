@@ -18,6 +18,7 @@ func (controller *Controller) RegisterEndpoints() {
 	{
 		authG.POST("/sign-up", controller.SignUp)
 		authG.POST("/sign-in", controller.SignIn)
+		authG.GET("/refresh", controller.RefreshTokenPairs)
 	}
 
 	apiG := controller.router.Group("/api", controller.checkUserAuthentication)

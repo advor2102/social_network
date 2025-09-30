@@ -12,4 +12,5 @@ var (
 	ErrEmployeeNameAlreadyExist        = errors.New("employee name already exist")
 	ErrIncorrectEmployeeNameOrPassword = errors.New("incorrect employee name or password")
 	ErrInvalidToken                    = errors.New("invalid token")
+	ErrSomethingWentWrong              = errors.New("something went wrong")
 )

@@ -18,6 +18,9 @@ import (
 // @contact.name SocialNetwork API Service
 // @contact.url https://socialnetwork.com
 // @contact.email help@socialetwork.com
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	logger.Info().Msg("Starting up application...")

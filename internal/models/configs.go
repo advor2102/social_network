@@ -28,5 +28,6 @@ type RedisParams struct {
 }
 
 type AuthParams struct {
-	TtlMinutes int `json:"ttl_minutes"`
+	AccessTokenTtlMinutes int `json:"access_token_ttl_minutes"`
+	RefreshTokenTtlDays int `json:"refresh_token_ttl_days"`
 }

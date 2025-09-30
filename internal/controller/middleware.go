@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/advor2102/socialnetwork/pkg"
 	"github.com/gin-gonic/gin"
@@ -14,34 +13,20 @@ const (
 )
 
 func (ctrl *Controller) checkUserAuthentication(c *gin.Context) {
-	header := c.GetHeader(authorizationHeader)
-
-	if header == "" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "empty authorization header",
-		})
-	}
-
-	headerParts := strings.Split(header, " ")
-	if len(headerParts) != 2 {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "invalid authorization header",
-		})
+	token, err := ctrl.extractTokenFromHeader(c, authorizationHeader)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: err.Error()})
 		return
 	}
 
-	if len(headerParts[1]) == 0 {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "empty token",
-		})
+	employeeID, isRefresh, err := pkg.ParseToken(token)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: err.Error()})
+		return
 	}
 
-	token := headerParts[1]
-	employeeID, err := pkg.ParseToken(token)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": err.Error(),
-		})
+	if isRefresh {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: "inappropriate token"})
 		return
 	}
 
