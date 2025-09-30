@@ -17,38 +17,28 @@ func (ctrl *Controller) checkUserAuthentication(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 
 	if header == "" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "empty authorization header",
-		})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: "empty authorization header"})
 	}
 
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "invalid authorization header",
-		})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: "invalid authorization header"})
 		return
 	}
 
 	if len(headerParts[1]) == 0 {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "empty token",
-		})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: "empty token"})
 	}
 
 	token := headerParts[1]
 	employeeID, isRefresh, err := pkg.ParseToken(token)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": err.Error(),
-		})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: err.Error()})
 		return
 	}
 
 	if isRefresh {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "inappropriate token",
-		})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: "inappropriate token",})
 		return
 	}
 
