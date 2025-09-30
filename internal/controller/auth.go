@@ -4,7 +4,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/advor2102/socialnetwork/internal/configs"
 	"github.com/advor2102/socialnetwork/internal/errs"
 	"github.com/advor2102/socialnetwork/internal/models"
 	"github.com/advor2102/socialnetwork/pkg"
@@ -53,10 +52,16 @@ func (ctrl *Controller) SignIn(c *gin.Context) {
 		return
 	}
 
-	accessToken, refreshToken, err := ctrl.service.Authenticate(c, models.Employee{
+	employeeID, err := ctrl.service.Authenticate(c, models.Employee{
 		EmployeeName: input.EmployeeName,
 		Password:     input.Password,
 	})
+	if err != nil {
+		ctrl.handleError(c, err)
+		return
+	}
+
+	accessToken, refreshToken, err := ctrl.generateNewTokenPair(employeeID)
 	if err != nil {
 		ctrl.handleError(c, err)
 		return
@@ -90,15 +95,9 @@ func (ctrl *Controller) RefreshTokenPairs(c *gin.Context) {
 		return
 	}
 
-	accessToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.AccessTokenTtlMinutes, false)
+	accessToken, refreshToken, err := ctrl.generateNewTokenPair(employeeID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, CommonError{Error: errs.ErrSomethingWentWrong.Error()})
-		return
-	}
-
-	refreshToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.RefreshTokenTtlDays, true)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, CommonError{Error: errs.ErrSomethingWentWrong.Error()})
+		ctrl.handleError(c, err)
 		return
 	}
 

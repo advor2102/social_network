@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/advor2102/socialnetwork/internal/configs"
 	"github.com/advor2102/socialnetwork/internal/errs"
 	"github.com/advor2102/socialnetwork/internal/models"
-	"github.com/advor2102/socialnetwork/pkg"
 	"github.com/advor2102/socialnetwork/utils"
 )
 
@@ -33,34 +31,34 @@ func (s *Service) CreateEmployee(ctx context.Context, employee models.Employee) 
 	return nil
 }
 
-func (s *Service) Authenticate(ctx context.Context, employee models.Employee)(string, string, error){
+func (s *Service) Authenticate(ctx context.Context, employee models.Employee) (int, error) {
 	empFromDB, err := s.repository.GetEmployeeByEmployeeName(ctx, employee.EmployeeName)
-	if err != nil{
+	if err != nil {
 		if !errors.Is(err, errs.ErrNotFound) {
-			return "", "", errs.ErrEmployeeNotFound
+			return 0, errs.ErrEmployeeNotFound
 		}
 
-		return "", "", err
+		return 0, err
 	}
 
 	employee.Password, err = utils.GenerateHash(employee.Password)
-	if err != nil{
-		return "", "", err
+	if err != nil {
+		return 0, err
 	}
 
 	if empFromDB.Password != employee.Password {
-		return "", "", errs.ErrIncorrectEmployeeNameOrPassword
+		return 0, errs.ErrIncorrectEmployeeNameOrPassword
 	}
 
-	accessToken, err := pkg.GenerateToken(empFromDB.ID, configs.AppSettings.AuthParams.AccessTokenTtlMinutes, false)
-	if err != nil {
-		return "", "", err
-	}
+	// accessToken, err := pkg.GenerateToken(empFromDB.ID, configs.AppSettings.AuthParams.AccessTokenTtlMinutes, false)
+	// if err != nil {
+	// 	return "", "", err
+	// }
 
-	refreshToken, err := pkg.GenerateToken(empFromDB.ID, configs.AppSettings.AuthParams.RefreshTokenTtlDays, true)
-	if err != nil {
-		return "", "", err
-	}
+	// refreshToken, err := pkg.GenerateToken(empFromDB.ID, configs.AppSettings.AuthParams.RefreshTokenTtlDays, true)
+	// if err != nil {
+	// 	return "", "", err
+	// }
 
-	return accessToken, refreshToken, nil
+	return empFromDB.ID, nil
 }
