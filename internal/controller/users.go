@@ -51,6 +51,15 @@ func (controller *Controller) GetAllUsers(c *gin.Context) {
 // @Failure 500 {object} CommonError
 // @Router /users/{id} [get]
 func (controller *Controller) GetUserByID(c *gin.Context) {
+	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.GetUserByID").Logger()
+	employeeID := c.GetInt(employeeIDCtx)
+	if employeeID == 0 {
+		c.JSON(http.StatusBadRequest, CommonError{Error: "invalid employeeID in context"})
+		return
+	}
+
+	logger.Debug().Int("employee_id", employeeID).Msg("GetUser")
+
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil || id < 1 {
@@ -86,6 +95,15 @@ type CreateUserRequest struct {
 // @Failure 500 {object} CommonError
 // @Router /users [post]
 func (controller *Controller) CreateUser(c *gin.Context) {
+	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.CreateUser").Logger()
+	employeeID := c.GetInt(employeeIDCtx)
+	if employeeID == 0 {
+		c.JSON(http.StatusBadRequest, CommonError{Error: "invalid employeeID in context"})
+		return
+	}
+
+	logger.Debug().Int("employee_id", employeeID).Msg("GetUser")
+
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		controller.handleError(c, errors.Join(errs.ErrInvalidRequestBody, err))
@@ -120,6 +138,15 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 // @Failure 500 {object} CommonError
 // @Router /users/{id} [put]
 func (controller *Controller) UpdateUserByID(c *gin.Context) {
+	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.UpdateUserByID").Logger()
+	employeeID := c.GetInt(employeeIDCtx)
+	if employeeID == 0 {
+		c.JSON(http.StatusBadRequest, CommonError{Error: "invalid employeeID in context"})
+		return
+	}
+
+	logger.Debug().Int("employee_id", employeeID).Msg("GetUser")
+
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil || id < 1 {
@@ -159,6 +186,15 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 // @Failure 500 {object} CommonError
 // @Router /users/{id} [delete]
 func (controller *Controller) DeleteUserByID(c *gin.Context) {
+	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.UpdateUserByID").Logger()
+	employeeID := c.GetInt(employeeIDCtx)
+	if employeeID == 0 {
+		c.JSON(http.StatusBadRequest, CommonError{Error: "invalid employeeID in context"})
+		return
+	}
+
+	logger.Debug().Int("employee_id", employeeID).Msg("GetUser")
+
 	idstr := c.Param("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil || id < 1 {
