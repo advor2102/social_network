@@ -5,6 +5,7 @@
 package mock_contracts
 
 import (
+	context "context"
 	reflect "reflect"
 
 	models "github.com/advor2102/socialnetwork/internal/models"
@@ -32,6 +33,35 @@ func NewMockServiceI(ctrl *gomock.Controller) *MockServiceI {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockServiceI) EXPECT() *MockServiceIMockRecorder {
 	return m.recorder
+}
+
+// Authenticate mocks base method.
+func (m *MockServiceI) Authenticate(ctx context.Context, employee models.Employee) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Authenticate", ctx, employee)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Authenticate indicates an expected call of Authenticate.
+func (mr *MockServiceIMockRecorder) Authenticate(ctx, employee interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticate", reflect.TypeOf((*MockServiceI)(nil).Authenticate), ctx, employee)
+}
+
+// CreateEmployee mocks base method.
+func (m *MockServiceI) CreateEmployee(ctx context.Context, employee models.Employee) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateEmployee", ctx, employee)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateEmployee indicates an expected call of CreateEmployee.
+func (mr *MockServiceIMockRecorder) CreateEmployee(ctx, employee interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateEmployee", reflect.TypeOf((*MockServiceI)(nil).CreateEmployee), ctx, employee)
 }
 
 // CreateUser mocks base method.

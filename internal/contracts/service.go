@@ -1,6 +1,8 @@
 package contracts
 
 import (
+	"context"
+
 	"github.com/advor2102/socialnetwork/internal/models"
 )
 
@@ -12,4 +14,7 @@ type ServiceI interface {
 	CreateUser(user models.User) (err error)
 	UpdateUserByID(user models.User) (err error)
 	DeleteUserByID(id int) (err error)
+
+	CreateEmployee(ctx context.Context, employee models.Employee) (error error)
+	Authenticate(ctx context.Context, employee models.Employee)(string, error)
 }
