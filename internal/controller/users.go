@@ -19,7 +19,7 @@ import (
 // @Produce json
 // @Success 200 {array} models.User
 // @Failure 500 {object} CommonError
-// @Router /users [get]
+// @Router /api/users [get]
 func (controller *Controller) GetAllUsers(c *gin.Context) {
 	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.GetAllUsers").Logger()
 	employeeID := c.GetInt(employeeIDCtx)
@@ -49,7 +49,7 @@ func (controller *Controller) GetAllUsers(c *gin.Context) {
 // @Failure 400 {object} CommonError
 // @Failure 404 {object} CommonError
 // @Failure 500 {object} CommonError
-// @Router /users/{id} [get]
+// @Router /api/users/{id} [get]
 func (controller *Controller) GetUserByID(c *gin.Context) {
 	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.GetUserByID").Logger()
 	employeeID := c.GetInt(employeeIDCtx)
@@ -93,7 +93,7 @@ type CreateUserRequest struct {
 // @Failure 400 {object} CommonError
 // @Failure 422 {object} CommonError
 // @Failure 500 {object} CommonError
-// @Router /users [post]
+// @Router /api/users [post]
 func (controller *Controller) CreateUser(c *gin.Context) {
 	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.CreateUser").Logger()
 	employeeID := c.GetInt(employeeIDCtx)
@@ -136,7 +136,7 @@ func (controller *Controller) CreateUser(c *gin.Context) {
 // @Failure 404 {object} CommonError
 // @Failure 422 {object} CommonError
 // @Failure 500 {object} CommonError
-// @Router /users/{id} [put]
+// @Router /api/users/{id} [put]
 func (controller *Controller) UpdateUserByID(c *gin.Context) {
 	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.UpdateUserByID").Logger()
 	employeeID := c.GetInt(employeeIDCtx)
@@ -184,7 +184,7 @@ func (controller *Controller) UpdateUserByID(c *gin.Context) {
 // @Failure 400 {object} CommonError
 // @Failure 404 {object} CommonError
 // @Failure 500 {object} CommonError
-// @Router /users/{id} [delete]
+// @Router /api/users/{id} [delete]
 func (controller *Controller) DeleteUserByID(c *gin.Context) {
 	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.UpdateUserByID").Logger()
 	employeeID := c.GetInt(employeeIDCtx)
