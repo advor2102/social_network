@@ -40,7 +40,8 @@ type SignIpRequest struct {
 }
 
 type SignIpResponse struct {
-	Token string `json:"token"`
+	AccessToken  string `json:"access_token_ttl_minutes"`
+	RefreshToken string `json:"refresh_token_ttl_days"`
 }
 
 func (ctrl *Controller) SignIn(c *gin.Context) {
@@ -50,7 +51,7 @@ func (ctrl *Controller) SignIn(c *gin.Context) {
 		return
 	}
 
-	token, err := ctrl.service.Authenticate(c, models.Employee{
+	accessToken, refreshToken, err := ctrl.service.Authenticate(c, models.Employee{
 		EmployeeName: input.EmployeeName,
 		Password:     input.Password,
 	})
@@ -60,6 +61,7 @@ func (ctrl *Controller) SignIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, SignIpResponse{
-		Token: token,
+		AccessToken: accessToken,
+		RefreshToken: refreshToken,
 	})
 }

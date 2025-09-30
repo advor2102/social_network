@@ -11,14 +11,20 @@ import (
 type CustomClaims struct {
 	jwt.StandardClaims
 	EmployeeID int `json:"employee_ID"`
+	IsRefresh bool `json:"is_refresh"`
 }
 
-func GenerateToken(employeeID int, ttl int) (string, error) {
+func GenerateToken(employeeID int, ttl int, isRefresh bool) (string, error) {
 	claims := CustomClaims{
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: int64(time.Duration(ttl) * time.Minute),
-		},
+		StandardClaims: jwt.StandardClaims{},
 		EmployeeID: employeeID,
+		IsRefresh: isRefresh,
+	}
+
+	if isRefresh{
+		claims.StandardClaims.ExpiresAt = int64(time.Duration(ttl) * 24 * time.Hour)
+	} else {
+		claims.StandardClaims.ExpiresAt = int64(time.Duration(ttl) * time.Minute)
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
