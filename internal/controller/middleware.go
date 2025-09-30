@@ -37,10 +37,17 @@ func (ctrl *Controller) checkUserAuthentication(c *gin.Context) {
 	}
 
 	token := headerParts[1]
-	employeeID, err := pkg.ParseToken(token)
+	employeeID, isRefresh, err := pkg.ParseToken(token)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"error": err.Error(),
+		})
+		return
+	}
+
+	if isRefresh {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"error": "inappropriate token",
 		})
 		return
 	}

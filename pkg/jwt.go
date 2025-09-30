@@ -31,7 +31,7 @@ func GenerateToken(employeeID int, ttl int, isRefresh bool) (string, error) {
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
 
-func ParseToken(tokenString string) (employeeID int, err error) {
+func ParseToken(tokenString string) (employeeID int, isRefresh bool, err error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -40,12 +40,12 @@ func ParseToken(tokenString string) (employeeID int, err error) {
 	})
 
 	if err != nil {
-		return 0, err
+		return 0, false, err
 	}
 
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
-		return claims.EmployeeID, nil
+		return claims.EmployeeID, claims.IsRefresh, nil
 	}
 
-	return 0, fmt.Errorf("invalid token")
+	return 0, false, fmt.Errorf("invalid token")
 }
