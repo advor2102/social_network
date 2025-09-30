@@ -4,8 +4,10 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/advor2102/socialnetwork/internal/configs"
 	"github.com/advor2102/socialnetwork/internal/errs"
 	"github.com/advor2102/socialnetwork/internal/models"
+	"github.com/advor2102/socialnetwork/pkg"
 	"github.com/gin-gonic/gin"
 )
 
@@ -61,7 +63,47 @@ func (ctrl *Controller) SignIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, SignIpResponse{
-		AccessToken: accessToken,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	})
+}
+
+const (
+	refreshTokenHeader = "X-Refresh_token"
+)
+
+func (ctrl *Controller) RefreshTokenPairs(c *gin.Context) {
+	token, err := ctrl.extractTokenFromHeader(c, refreshTokenHeader)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, CommonError{Error: err.Error()})
+		return
+	}
+
+	employeeID, isRefresh, err := pkg.ParseToken(token)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, CommonError{Error: err.Error()})
+		return
+	}
+
+	if !isRefresh {
+		c.JSON(http.StatusUnauthorized, CommonError{Error: "inappropriate token"})
+		return
+	}
+
+	accessToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.AccessTokenTtlMinutes, false)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, CommonError{Error: errs.ErrSomethingWentWrong.Error()})
+		return
+	}
+
+	refreshToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.RefreshTokenTtlDays, true)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, CommonError{Error: errs.ErrSomethingWentWrong.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, SignIpResponse{
+		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	})
 }
