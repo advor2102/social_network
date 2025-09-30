@@ -16,11 +16,11 @@ func (controller *Controller) RegisterEndpoints() {
 
 	authG := controller.router.Group("/auth")
 	{
-		authG.POST("/auth/sign-up", controller.SignUp)
-		authG.POST("/auth/sign-in", controller.SignIn)
+		authG.POST("/sign-up", controller.SignUp)
+		authG.POST("/sign-in", controller.SignIn)
 	}
-	
-	apiG := controller.router.Group("/api")
+
+	apiG := controller.router.Group("/api", controller.checkUserAuthentication)
 	{
 		apiG.GET("/users", controller.GetAllUsers)
 		apiG.GET("/users/:id", controller.GetUserByID)

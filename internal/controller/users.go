@@ -3,11 +3,13 @@ package controller
 import (
 	"errors"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/advor2102/socialnetwork/internal/errs"
 	"github.com/advor2102/socialnetwork/internal/models"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
 )
 
 // GetAllUsers
@@ -19,6 +21,15 @@ import (
 // @Failure 500 {object} CommonError
 // @Router /users [get]
 func (controller *Controller) GetAllUsers(c *gin.Context) {
+	logger := zerolog.New(os.Stdout).With().Str("func_name", "controller.GetAllUsers").Logger()
+	employeeID := c.GetInt(employeeIDCtx)
+	if employeeID == 0 {
+		c.JSON(http.StatusBadRequest, CommonError{Error: "invalid employeeID in context"})
+		return
+	}
+
+	logger.Debug().Int("employee_id", employeeID).Msg("GetUser")
+
 	users, err := controller.service.GetAllUsers()
 	if err != nil {
 		controller.handleError(c, err)

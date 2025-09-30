@@ -21,8 +21,7 @@ func GenerateToken(employeeID int, ttl int) (string, error) {
 		EmployeeID: employeeID,
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
-
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
 
@@ -35,7 +34,7 @@ func ParseToken(tokenString string) (employeeID int, err error) {
 	})
 
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
