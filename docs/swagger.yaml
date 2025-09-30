@@ -18,6 +18,29 @@ definitions:
       user_name:
         type: string
     type: object
+  controller.SignIpRequest:
+    properties:
+      employee_name:
+        type: string
+      password:
+        type: string
+    type: object
+  controller.SignUpRequest:
+    properties:
+      employee_name:
+        type: string
+      full_name:
+        type: string
+      password:
+        type: string
+    type: object
+  controller.TokenPairResponse:
+    properties:
+      access_token_ttl_minutes:
+        type: string
+      refresh_token_ttl_days:
+        type: string
+    type: object
   models.User:
     properties:
       age:
@@ -36,6 +59,101 @@ info:
     url: https://socialnetwork.com
   title: SocialNetwork API
 paths:
+  /auth/refresh:
+    get:
+      description: Refresh token pairs
+      parameters:
+      - description: input refresh token
+        in: header
+        name: X-Refresh_token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.TokenPairResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+      summary: Refresh token pairs
+      tags:
+      - Auth
+  /auth/sign-in:
+    post:
+      description: Enter as an employee
+      parameters:
+      - description: login and password
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.SignIpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.TokenPairResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+      summary: Enter
+      tags:
+      - Auth
+  /auth/sign-up:
+    post:
+      description: Create new employee and add to database
+      parameters:
+      - description: new employee data
+        in: body
+        name: request_body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.SignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controller.CommonResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.CommonError'
+      summary: Create employee
+      tags:
+      - Auth
   /ping:
     get:
       description: Check of the service

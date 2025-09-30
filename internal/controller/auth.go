@@ -16,6 +16,18 @@ type SignUpRequest struct {
 	Password     string `json:"password" db:"password"`
 }
 
+// SignUp
+// @Summary Create employee
+// @Description Create new employee and add to database
+// @Tags Auth
+// @Consume json
+// @Produce json
+// @Param request_body body SignUpRequest true "new employee data"
+// @Success 201 {object} CommonResponse
+// @Failure 400 {object} CommonError
+// @Failure 404 {object} CommonError
+// @Failure 500 {object} CommonError
+// @Router /auth/sign-up [post]
 func (ctrl *Controller) SignUp(c *gin.Context) {
 	var input SignUpRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -45,6 +57,18 @@ type TokenPairResponse struct {
 	RefreshToken string `json:"refresh_token_ttl_days"`
 }
 
+// SignIn
+// @Summary Enter
+// @Description Enter as an employee
+// @Tags Auth
+// @Consume json
+// @Produce json
+// @Param request_body body SignIpRequest true "login and password"
+// @Success 200 {object} TokenPairResponse
+// @Failure 400 {object} CommonError
+// @Failure 404 {object} CommonError
+// @Failure 500 {object} CommonError
+// @Router /auth/sign-in [post]
 func (ctrl *Controller) SignIn(c *gin.Context) {
 	var input SignIpRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -77,6 +101,17 @@ const (
 	refreshTokenHeader = "X-Refresh_token"
 )
 
+// RefreshTokenPairs
+// @Summary Refresh token pairs
+// @Description Refresh token pairs
+// @Tags Auth
+// @Produce json
+// @Param X-Refresh_token header string true "input refresh token"
+// @Success 200 {object} TokenPairResponse
+// @Failure 400 {object} CommonError
+// @Failure 404 {object} CommonError
+// @Failure 500 {object} CommonError
+// @Router /auth/refresh [get]
 func (ctrl *Controller) RefreshTokenPairs(c *gin.Context) {
 	token, err := ctrl.extractTokenFromHeader(c, refreshTokenHeader)
 	if err != nil {
