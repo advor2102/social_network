@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS employees
+(
+    id SERIAL PRIMARY KEY,
+    full_name VARCHAR NOT NULL,
+    employee_name VARCHAR NOT NULL UNIQUE,
+    password VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
