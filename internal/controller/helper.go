@@ -16,16 +16,13 @@ func (ctrl *Controller) extractTokenFromHeader(c *gin.Context, headerKey string)
 	if header == "" {
 		return "", errors.New("empty authorization header")
 	}
-
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 {
 		return "", errors.New("invalid authorization header")
 	}
-
 	if len(headerParts[1]) == 0 {
 		return "", errors.New("empty token")
 	}
-
 	return headerParts[1], nil
 }
 
@@ -34,11 +31,9 @@ func (ctrl *Controller) generateNewTokenPair(employeeID int, employeeRole models
 	if err != nil {
 		return "", "", err
 	}
-
 	refreshToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.RefreshTokenTtlDays, employeeRole, true)
 	if err != nil {
 		return "", "", err
 	}
-
 	return accessToken, refreshToken, nil
 }
