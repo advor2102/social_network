@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"github.com/advor2102/socialnetwork/internal/models"
 	"github.com/advor2102/socialnetwork/pkg"
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +11,7 @@ import (
 const (
 	authorizationHeader = "Authorization"
 	employeeIDCtx       = "employeeID"
+	employeeRoleCtx     = "employeeRole"
 )
 
 func (ctrl *Controller) checkUserAuthentication(c *gin.Context) {
@@ -19,7 +21,7 @@ func (ctrl *Controller) checkUserAuthentication(c *gin.Context) {
 		return
 	}
 
-	employeeID, isRefresh, err := pkg.ParseToken(token)
+	employeeID, isRefresh, employeeRole, err := pkg.ParseToken(token)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: err.Error()})
 		return
@@ -31,4 +33,20 @@ func (ctrl *Controller) checkUserAuthentication(c *gin.Context) {
 	}
 
 	c.Set(employeeIDCtx, employeeID)
+	c.Set(employeeRoleCtx, string(employeeRole))
+}
+
+func (ctrl *Controller) checkIsAdmin(c *gin.Context) {
+	role := c.GetString(employeeRoleCtx)
+	if role == "" {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, CommonError{Error: "role is not in context"})
+		return
+	}
+
+	if role != models.RoleAdmin {
+		c.AbortWithStatusJSON(http.StatusForbidden, CommonError{Error: "permission denied"})
+		return
+	}
+
+	c.Next()
 }

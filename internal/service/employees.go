@@ -24,6 +24,8 @@ func (s *Service) CreateEmployee(ctx context.Context, employee models.Employee) 
 		return err
 	}
 
+	employee.Role = models.RoleUser
+
 	if err = s.repository.CreateEmployee(ctx, employee); err != nil {
 		return err
 	}
@@ -31,34 +33,24 @@ func (s *Service) CreateEmployee(ctx context.Context, employee models.Employee) 
 	return nil
 }
 
-func (s *Service) Authenticate(ctx context.Context, employee models.Employee) (int, error) {
+func (s *Service) Authenticate(ctx context.Context, employee models.Employee) (int, models.Role, error) {
 	empFromDB, err := s.repository.GetEmployeeByEmployeeName(ctx, employee.EmployeeName)
 	if err != nil {
 		if !errors.Is(err, errs.ErrNotFound) {
-			return 0, errs.ErrEmployeeNotFound
+			return 0, "", errs.ErrEmployeeNotFound
 		}
 
-		return 0, err
+		return 0, "", err
 	}
 
 	employee.Password, err = utils.GenerateHash(employee.Password)
 	if err != nil {
-		return 0, err
+		return 0, "", err
 	}
 
 	if empFromDB.Password != employee.Password {
-		return 0, errs.ErrIncorrectEmployeeNameOrPassword
+		return 0, "", errs.ErrIncorrectEmployeeNameOrPassword
 	}
 
-	// accessToken, err := pkg.GenerateToken(empFromDB.ID, configs.AppSettings.AuthParams.AccessTokenTtlMinutes, false)
-	// if err != nil {
-	// 	return "", "", err
-	// }
-
-	// refreshToken, err := pkg.GenerateToken(empFromDB.ID, configs.AppSettings.AuthParams.RefreshTokenTtlDays, true)
-	// if err != nil {
-	// 	return "", "", err
-	// }
-
-	return empFromDB.ID, nil
+	return empFromDB.ID, empFromDB.Role, nil
 }

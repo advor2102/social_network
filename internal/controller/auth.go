@@ -76,7 +76,7 @@ func (ctrl *Controller) SignIn(c *gin.Context) {
 		return
 	}
 
-	employeeID, err := ctrl.service.Authenticate(c, models.Employee{
+	employeeID, employeeRole, err := ctrl.service.Authenticate(c, models.Employee{
 		EmployeeName: input.EmployeeName,
 		Password:     input.Password,
 	})
@@ -85,7 +85,7 @@ func (ctrl *Controller) SignIn(c *gin.Context) {
 		return
 	}
 
-	accessToken, refreshToken, err := ctrl.generateNewTokenPair(employeeID)
+	accessToken, refreshToken, err := ctrl.generateNewTokenPair(employeeID, employeeRole)
 	if err != nil {
 		ctrl.handleError(c, err)
 		return
@@ -119,7 +119,7 @@ func (ctrl *Controller) RefreshTokenPairs(c *gin.Context) {
 		return
 	}
 
-	employeeID, isRefresh, err := pkg.ParseToken(token)
+	employeeID, isRefresh, employeeRole, err := pkg.ParseToken(token)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, CommonError{Error: err.Error()})
 		return
@@ -130,7 +130,7 @@ func (ctrl *Controller) RefreshTokenPairs(c *gin.Context) {
 		return
 	}
 
-	accessToken, refreshToken, err := ctrl.generateNewTokenPair(employeeID)
+	accessToken, refreshToken, err := ctrl.generateNewTokenPair(employeeID, employeeRole)
 	if err != nil {
 		ctrl.handleError(c, err)
 		return

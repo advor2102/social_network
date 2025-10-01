@@ -7,6 +7,14 @@ type Employee struct {
 	FullName     string    `json:"full_name" db:"full_name"`
 	EmployeeName string    `json:"employee_name" db:"employee_name"`
 	Password     string    `json:"password" db:"password"`
+	Role         Role      `json:"role" db:"role"`
 	CreatedAt    time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at" db:"updated_at"`
 }
+
+type Role string
+
+const (
+	RoleUser  = "USER"
+	RoleAdmin = "ADMIN"
+)
