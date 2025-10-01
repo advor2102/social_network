@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/advor2102/socialnetwork/internal/configs"
+	"github.com/advor2102/socialnetwork/internal/models"
 	"github.com/advor2102/socialnetwork/pkg"
 	"github.com/gin-gonic/gin"
 )
@@ -28,13 +29,13 @@ func (ctrl *Controller) extractTokenFromHeader(c *gin.Context, headerKey string)
 	return headerParts[1], nil
 }
 
-func (ctrl *Controller) generateNewTokenPair(employeeID int) (string, string, error) {
-	accessToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.AccessTokenTtlMinutes, false)
+func (ctrl *Controller) generateNewTokenPair(employeeID int, employeeRole models.Role) (string, string, error) {
+	accessToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.AccessTokenTtlMinutes, employeeRole, false)
 	if err != nil {
 		return "", "", err
 	}
 
-	refreshToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.RefreshTokenTtlDays, true)
+	refreshToken, err := pkg.GenerateToken(employeeID, configs.AppSettings.AuthParams.RefreshTokenTtlDays, employeeRole, true)
 	if err != nil {
 		return "", "", err
 	}

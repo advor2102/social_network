@@ -25,9 +25,9 @@ func (controller *Controller) RegisterEndpoints() {
 	{
 		apiG.GET("/users", controller.GetAllUsers)
 		apiG.GET("/users/:id", controller.GetUserByID)
-		apiG.POST("/users", controller.CreateUser)
-		apiG.PUT("/users/:id", controller.UpdateUserByID)
-		apiG.DELETE("/users/:id", controller.DeleteUserByID)
+		apiG.POST("/users", controller.checkIsAdmin, controller.CreateUser)
+		apiG.PUT("/users/:id", controller.checkIsAdmin, controller.UpdateUserByID)
+		apiG.DELETE("/users/:id", controller.checkIsAdmin, controller.DeleteUserByID)
 	}
 }
 

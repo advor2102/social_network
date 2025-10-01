@@ -11,11 +11,12 @@ import (
 func (r *Repository) CreateEmployee(ctx context.Context, employee models.Employee) (err error) {
 	logger := zerolog.New(os.Stdout).With().Timestamp().Str("func_name", "repository.CreateEmployee").Logger()
 
-	_, err = r.db.ExecContext(ctx, `INSERT INTO employees(full_name, employee_name, password) 
-						VALUES ($1, $2, $3)`,
+	_, err = r.db.ExecContext(ctx, `INSERT INTO employees(full_name, employee_name, password, role) 
+						VALUES ($1, $2, $3, $4)`,
 		employee.FullName,
 		employee.EmployeeName,
-		employee.Password)
+		employee.Password,
+		employee.Role)
 	if err != nil {
 		logger.Err(err).Msg("error inserting employee")
 		return r.translateError(err)
@@ -27,7 +28,7 @@ func (r *Repository) GetEmployeeByID(ctx context.Context, id int) (employee mode
 	logger := zerolog.New(os.Stdout).With().Timestamp().Str("func_name", "repository.GetEmployeeByID").Logger()
 
 	if err = r.db.GetContext(ctx, &employee, `
-		SELECT id, full_name, employee_name, password, created_at, updated_at
+		SELECT id, full_name, employee_name, password, role, created_at, updated_at
 		FROM employees
 		WHERE id = $1`, id); err != nil {
 		logger.Err(err).Msg("error selecting employee")
@@ -41,7 +42,7 @@ func (r *Repository) GetEmployeeByEmployeeName(ctx context.Context, employeeName
 	logger := zerolog.New(os.Stdout).With().Timestamp().Str("func_name", "repository.GetEmployeeByID").Logger()
 
 	if err = r.db.GetContext(ctx, &employee, `
-		SELECT id, full_name, employee_name, password, created_at, updated_at
+		SELECT id, full_name, employee_name, password, role, created_at, updated_at
 		FROM employees
 		WHERE employee_name = $1`, employeeName); err != nil {
 		logger.Err(err).Msg("error selecting employee")
