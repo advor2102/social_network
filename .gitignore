@@ -1,4 +1,3 @@
-*.sql
 internal/configs/configs.json
 .env
 Makefile
